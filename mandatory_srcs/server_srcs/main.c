@@ -6,7 +6,7 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 18:38:40 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/11 18:46:09 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/11 19:19:18 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ void	end_of_transmission(t_chars **first_node, t_chars **current_node, size_t *s
 		(*first_node) = tmp;
 	}
 }
-
-//to_do(facultatif): remember the last node
 
 void	add_last(t_chars **first_node, t_chars *current_node)
 {
