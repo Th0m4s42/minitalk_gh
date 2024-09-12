@@ -6,7 +6,7 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 18:38:40 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/11 19:19:18 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/12 12:45:34 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	end_of_transmission(t_chars **first_node, t_chars **current_node, size_t *s
 		free(*first_node);
 		(*first_node) = tmp;
 	}
+	ft_printf("\n");
 }
 
 void	add_last(t_chars **first_node, t_chars *current_node)
@@ -65,7 +66,6 @@ void handler(int sign_id, siginfo_t *info, void *ucontext)
 	static t_chars *first_node;
 	static t_chars *current_node;
 	
-	printf("%zu\n", sign_count);
 	if (sign_count == 0)
 	{
 		current_node = init_node();
