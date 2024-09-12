@@ -6,11 +6,23 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 18:38:40 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/12 19:06:16 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/12 20:02:44 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minitalk.h"
+
+void free_list(t_chars **first_node)
+{
+    t_chars *tmp;
+
+    while (*first_node != NULL)
+    {
+        tmp = *first_node;
+        *first_node = (*first_node)->next;
+        free(tmp);
+    }
+}
 
 void	end_of_transmission(t_chars **first_node, t_chars **current_node, size_t *sign_count)
 {
@@ -84,7 +96,10 @@ void handler(int sign_id, siginfo_t *info, void *ucontext)
 	if (sign_id == SIGUSR1 || sign_id == SIGUSR2)
 	{
 		if (sign_count % 8 == 0 && current_node->c == '\0')
+		{
 			end_of_transmission(&first_node, &current_node, &sign_count);
+			free_list(first_node);
+		}
 		kill(info->si_pid, SIGUSR1);
 		(void)ucontext;
 	}
