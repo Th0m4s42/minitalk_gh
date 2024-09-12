@@ -6,7 +6,7 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 18:38:40 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/12 18:34:01 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/12 19:06:16 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int	main(void)
 		ft_putendl_fd("Failed to set up signal handlers", 2);
 		return (-1);
 	}
-	ft_printf("PID de mon serveur %d\n", getpid());
+	ft_printf("Server PID: %d\n", getpid());
 	while(1)
 		pause();
 	return (0);
