@@ -6,7 +6,7 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 13:07:09 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/12 19:06:25 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/12 19:44:08 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 
 void	acknowledgement_handler(int signum)
 {
-	(void)signum;
+	if (signum == SIGUSR1)
+	{
+		kill(getpid(), SIGUSR2);
+	}
 }
 
 void	send_char(int server_pid, char c)
@@ -56,6 +59,7 @@ int	main(int argc, char **argv)
 	}
 	server_pid = ft_atoi(argv[1]);
 	signal(SIGUSR1, acknowledgement_handler);
+	signal(SIGUSR2, acknowledgement_handler);
 	send_message(server_pid, argv[2]);
-	return 0;
+	return (0);
 }
