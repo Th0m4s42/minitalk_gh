@@ -6,7 +6,7 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 18:38:40 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/12 12:45:34 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/12 18:34:01 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@ void	end_of_transmission(t_chars **first_node, t_chars **current_node, size_t *s
 	t_chars	*tmp;
 	
 	*sign_count = 0;
-	(void)current_node;
-	current_node = NULL;
+	(*current_node) = NULL;
 	while ((*first_node) != NULL)
 	{
 		tmp = (*first_node)->next;
@@ -33,8 +32,6 @@ void	add_last(t_chars **first_node, t_chars *current_node)
 {
 	t_chars	*last;
 
-	if (first_node == NULL)
-		return ;
 	if (*first_node == NULL)
 	{
 		*first_node = current_node;
@@ -84,10 +81,13 @@ void handler(int sign_id, siginfo_t *info, void *ucontext)
 	else if (sign_id == SIGUSR2)
 		current_node->c = (current_node->c << 1) + 1;
 	sign_count++;
-	if (sign_count % 8 == 0 && current_node->c == '\0')
-		end_of_transmission(&first_node, &current_node, &sign_count);
-	kill(info->si_pid, SIGUSR1);
-	(void)ucontext;
+	if (sign_id == SIGUSR1 || sign_id == SIGUSR2)
+	{
+		if (sign_count % 8 == 0 && current_node->c == '\0')
+			end_of_transmission(&first_node, &current_node, &sign_count);
+		kill(info->si_pid, SIGUSR1);
+		(void)ucontext;
+	}
 }
 
 int	main(void)
@@ -96,8 +96,11 @@ int	main(void)
 	ft_bzero(&sa, sizeof(sa));
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = handler;
-	sigaction(SIGUSR1, &sa, NULL);
-	sigaction(SIGUSR2, &sa, NULL);
+	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa, NULL))
+	{
+		ft_putendl_fd("Failed to set up signal handlers", 2);
+		return (-1);
+	}
 	ft_printf("PID de mon serveur %d\n", getpid());
 	while(1)
 		pause();

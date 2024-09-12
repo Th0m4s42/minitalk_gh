@@ -6,9 +6,10 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 13:07:09 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/12 13:07:21 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/12 17:22:43 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../../minitalk.h"
 
@@ -28,7 +29,7 @@ void	send_char(int server_pid, char c)
 			kill(server_pid, SIGUSR2);
 		else
 			kill(server_pid, SIGUSR1);
-		usleep(100);
+		pause();
 		bit--;
 	}
 }
