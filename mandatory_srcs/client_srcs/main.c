@@ -6,7 +6,7 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 13:07:09 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/13 16:21:24 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/13 18:56:39 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,13 @@ void	acknowledgement_handler(int signum)
 	static int	received = 0;
 	
 	if (signum == SIGUSR1)
-		++received;
-	else
 	{
+		++received;
+		ft_printf("Received bits: %d\n", received);
+	}
+	else if (signum == SIGUSR2)
+	{
+		ft_printf("Transmission completed!\n");
 		exit(0);
 	}
 }
@@ -40,7 +44,7 @@ void	send_message(int server_pid, const char *message)
 				kill(server_pid, SIGUSR2);
 			else
 				kill(server_pid, SIGUSR1);
-			usleep(100);
+			pause();
 			bit--;
 		}
 		i++;
@@ -49,7 +53,7 @@ void	send_message(int server_pid, const char *message)
 	while (bit >= 0)
 	{
 		kill(server_pid, SIGUSR1);
-		usleep(100);
+		pause();
 	}
 }
 
