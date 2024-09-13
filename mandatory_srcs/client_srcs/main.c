@@ -6,35 +6,30 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 13:07:09 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/13 18:56:39 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/13 20:07:05 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minitalk.h"
 
 
-void	acknowledgement_handler(int signum)
+char	*get_msg(char *new_msg)
 {
-	static int	received = 0;
-	
-	if (signum == SIGUSR1)
-	{
-		++received;
-		ft_printf("Received bits: %d\n", received);
-	}
-	else if (signum == SIGUSR2)
-	{
-		ft_printf("Transmission completed!\n");
-		exit(0);
-	}
+	static char	*msg;
+
+	if (new_msg != NULL)
+		msg = new_msg;
+	return (msg);
 }
 
-void	send_message(int server_pid, const char *message)
+void	send_message(int server_pid)
 {
-	int i;
-	int bit;
+	int		i;
+	int		bit;
+	char	*message;
 	
 	i = 0;
+	message = get_msg(NULL);
 	while (message[i] != '\0')
 	{
 		bit = 7;
@@ -54,6 +49,7 @@ void	send_message(int server_pid, const char *message)
 	{
 		kill(server_pid, SIGUSR1);
 		pause();
+		bit--;
 	}
 }
 
@@ -67,9 +63,10 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	server_pid = ft_atoi(argv[1]);
-	signal(SIGUSR1, acknowledgement_handler);
-	signal(SIGUSR2, acknowledgement_handler);
-	send_message(server_pid, argv[2]);
+	get_msg(argv[2]);
+	signal(SIGUSR1, send_message);
+	signal(SIGUSR2, send_message);
+	send_message(server_pid);
 	while (1)
 		pause();
 	return (0);
