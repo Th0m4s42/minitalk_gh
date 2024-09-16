@@ -6,7 +6,7 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 13:38:29 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/12 18:54:53 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/14 12:23:38 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,12 @@ typedef struct	s_chars
 	unsigned char	c;
 	struct s_chars	*next;
 }				t_chars;
+
+typedef struct	s_target
+{
+	int				target_pid;
+	char			*s;
+	unsigned int	s_len;
+}				t_target;
 
 #endif /** MINITALK_H */

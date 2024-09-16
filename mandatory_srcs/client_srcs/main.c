@@ -6,67 +6,76 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 13:07:09 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/13 20:07:05 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/16 16:44:05 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minitalk.h"
 
 
-char	*get_msg(char *new_msg)
+t_target	*get_msg(t_target *new_msg)
 {
-	static char	*msg;
+	static t_target	*msg;
 
 	if (new_msg != NULL)
 		msg = new_msg;
 	return (msg);
 }
 
-void	send_message(int server_pid)
+void    free_exit(t_target *target, const char *msg)
 {
-	int		i;
-	int		bit;
-	char	*message;
-	
-	i = 0;
-	message = get_msg(NULL);
-	while (message[i] != '\0')
+	if (msg)
+		ft_printf("%s\n", msg);
+	if (target)
+		free(target->s);
+	exit(0);
+}
+
+void	send_message(int signum)
+{
+	static unsigned int	i = 0;
+	static int	bits_count = 0;
+	static t_target	*target = NULL;
+
+	if (target == NULL)
+		target = get_msg(NULL);
+	if (i >= target->s_len)
+		free_exit(target, "Message sent successfully");
+	if ((*(target->s + i) >> (7 - bits_count)) & 1)
+		signum = SIGUSR2;
+	else
+		signum = SIGUSR1;
+	if (bits_count == 7)
 	{
-		bit = 7;
-		while (bit >= 0)
-		{
-			if (message[i] >> bit & 1)
-				kill(server_pid, SIGUSR2);
-			else
-				kill(server_pid, SIGUSR1);
-			pause();
-			bit--;
-		}
 		i++;
+		bits_count = 0;
 	}
-	bit = 7;
-	while (bit >= 0)
+	else
 	{
-		kill(server_pid, SIGUSR1);
-		pause();
-		bit--;
+		bits_count++;
 	}
+	kill(target->target_pid, signum);
 }
 
 int	main(int argc, char **argv)
 {
-	int server_pid;
+	t_target *target;
 
 	if (argc != 3)
 	{
 		printf("Usage: %s <server_pid> <message>\n", argv[0]);
 		return (1);
 	}
-	server_pid = ft_atoi(argv[1]);
-	get_msg(argv[2]);
+	target = malloc(sizeof(t_target));
+	if (target == NULL)
+		return (1);
+	target->target_pid = ft_atoi(argv[1]);
+	target->s = ft_strdup(argv[2]);
+	target->s_len = ft_strlen(argv[2]);
+	get_msg(target);
 	signal(SIGUSR1, send_message);
 	signal(SIGUSR2, send_message);
-	send_message(server_pid);
+	send_message(0);
 	while (1)
 		pause();
 	return (0);
