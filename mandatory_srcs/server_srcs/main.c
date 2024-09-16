@@ -6,7 +6,7 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 18:38:40 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/12 20:04:27 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/16 20:12:31 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 void free_list(t_chars **first_node)
 {
-    t_chars *tmp;
+	t_chars *tmp;
 
-    while (*first_node != NULL)
-    {
-        tmp = *first_node;
-        *first_node = (*first_node)->next;
-        free(tmp);
-    }
+	while (*first_node != NULL)
+	{
+		tmp = *first_node;
+		*first_node = (*first_node)->next;
+		free(tmp);
+	}
 }
 
 void	end_of_transmission(t_chars **first_node, t_chars **current_node, size_t *sign_count)
@@ -99,6 +99,7 @@ void handler(int sign_id, siginfo_t *info, void *ucontext)
 		{
 			end_of_transmission(&first_node, &current_node, &sign_count);
 			free_list(&first_node);
+			free(current_node);
 		}
 		kill(info->si_pid, SIGUSR1);
 		(void)ucontext;
