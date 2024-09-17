@@ -6,7 +6,7 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 18:38:40 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/17 20:40:41 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/17 20:42:46 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,17 +126,6 @@ void	handler(int sign_id, siginfo_t *info, void *ucontext)
 	sign_count++;
 	last_signal(&current_node, &first_node, &sign_count, ucontext, info);
 }
-	// if (sign_id == SIGUSR1 || sign_id == SIGUSR2)
-	// {
-	// 	if (sign_count % 8 == 0 && current_node->c == '\0')
-	// 	{
-	// 		end_of_transmission(&first_node, &current_node, &sign_count);
-	// 		free_list(&first_node);
-	// 		free(current_node);
-	// 	}
-	// 	kill(info->si_pid, SIGUSR1);
-	// 	(void)ucontext;
-	// }
 
 int	main(void)
 {
