@@ -6,7 +6,7 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 18:38:40 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/17 20:42:46 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/17 22:25:15 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,25 +24,6 @@ void free_list(t_chars **first_node)
 	}
 }
 
-void cleanup(t_chars **first_node, t_chars **current_node)
-{
-    free_list(first_node);
-    if (*current_node != NULL)
-	{
-        free(*current_node);
-	}
-}
-
-void handle_exit(int signum)
-{
-    static t_chars *first_node = NULL;
-    static t_chars *current_node = NULL;
-
-    (void)signum;
-    cleanup(&first_node, &current_node);
-    ft_printf("Exiting...\n");
-    exit(0);
-}
 void	end_of_transmission(t_chars **first_node, t_chars **current_node, size_t *sign_count)
 {
 	t_chars	*tmp;
@@ -130,14 +111,10 @@ void	handler(int sign_id, siginfo_t *info, void *ucontext)
 int	main(void)
 {
 	struct sigaction sa;
-	struct sigaction exit_action;
 	
 	ft_bzero(&sa, sizeof(sa));
-	ft_bzero(&exit_action, sizeof(exit_action));
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = handler;
-	exit_action.sa_handler = handle_exit;
-	sigaction(SIGINT, &exit_action, NULL);
 	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa, NULL) == -1)
 	{
 		ft_putendl_fd("Failed to set up signal handlers", 2);
