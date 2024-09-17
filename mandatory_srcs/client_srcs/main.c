@@ -6,7 +6,7 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 13:07:09 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/16 20:08:26 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/17 18:28:11 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_target	*get_msg(t_target *new_msg)
 	return (msg);
 }
 
-void    free_exit(t_target *target, const char *msg)
+void	free_exit(t_target *target, const char *msg)
 {
 	if (msg)
 		ft_printf("%s\n", msg);
