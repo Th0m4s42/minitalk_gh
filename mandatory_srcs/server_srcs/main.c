@@ -6,7 +6,7 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 18:38:40 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/17 22:25:15 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/18 12:47:41 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	end_of_transmission(t_chars **first_node, t_chars **current_node, size_t *s
 	t_chars	*tmp;
 	
 	*sign_count = 0;
+	free(*current_node);
 	(*current_node) = NULL;
 	while ((*first_node) != NULL)
 	{
