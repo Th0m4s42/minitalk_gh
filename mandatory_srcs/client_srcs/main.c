@@ -6,12 +6,11 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 13:07:09 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/17 18:28:11 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/18 13:13:30 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minitalk.h"
-
 
 t_target	*get_msg(t_target *new_msg)
 {
@@ -36,9 +35,9 @@ void	free_exit(t_target *target, const char *msg)
 
 void	send_message(int signum)
 {
-	static unsigned int	i = 0;
-	static int	bits_count = 0;
-	static t_target	*target = NULL;
+	static unsigned int		i;
+	static int				bits_count;
+	static t_target			*target;
 
 	if (target == NULL)
 		target = get_msg(NULL);
@@ -62,7 +61,7 @@ void	send_message(int signum)
 
 int	main(int argc, char **argv)
 {
-	t_target *target;
+	t_target	*target;
 
 	if (argc != 3)
 	{

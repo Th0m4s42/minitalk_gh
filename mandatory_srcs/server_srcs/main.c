@@ -6,15 +6,15 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 18:38:40 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/18 12:47:41 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/18 13:26:07 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minitalk.h"
 
-void free_list(t_chars **first_node)
+void	free_list(t_chars **first_node)
 {
-	t_chars *tmp;
+	t_chars	*tmp;
 
 	while (*first_node != NULL)
 	{
@@ -24,10 +24,11 @@ void free_list(t_chars **first_node)
 	}
 }
 
-void	end_of_transmission(t_chars **first_node, t_chars **current_node, size_t *sign_count)
+void	end_of_transmission(t_chars **first_node, t_chars **current_node,
+								size_t *sign_count)
 {
 	t_chars	*tmp;
-	
+
 	*sign_count = 0;
 	free(*current_node);
 	(*current_node) = NULL;
@@ -58,10 +59,10 @@ void	add_last(t_chars **first_node, t_chars *current_node)
 	last->next = current_node;
 }
 
-t_chars *init_node(void)
+t_chars	*init_node(void)
 {
-	t_chars *new_node;
-	
+	t_chars	*new_node;
+
 	new_node = (t_chars *)malloc(sizeof(t_chars));
 	if (new_node == NULL)
 		return (NULL);
@@ -69,7 +70,9 @@ t_chars *init_node(void)
 	new_node->next = NULL;
 	return (new_node);
 }
-void	last_signal(t_chars **current_node, t_chars **first_node, size_t *sign_count, void *ucontext, siginfo_t *info)
+
+void	last_signal(t_chars **current_node, t_chars **first_node,
+						size_t *sign_count, siginfo_t *info)
 {
 	if (*sign_count % 8 == 0 && (*current_node)->c == '\0')
 	{
@@ -79,15 +82,14 @@ void	last_signal(t_chars **current_node, t_chars **first_node, size_t *sign_coun
 		*current_node = NULL;
 	}
 	kill(info->si_pid, SIGUSR1);
-	(void)ucontext;
 }
 
 void	handler(int sign_id, siginfo_t *info, void *ucontext)
 {
-	static size_t sign_count;
-	static t_chars *first_node;
-	static t_chars *current_node;
-	
+	static size_t	sign_count;
+	static t_chars	*first_node;
+	static t_chars	*current_node;
+
 	if (sign_count == 0)
 	{
 		current_node = init_node();
@@ -106,23 +108,25 @@ void	handler(int sign_id, siginfo_t *info, void *ucontext)
 	else if (sign_id == SIGUSR2)
 		current_node->c = (current_node->c << 1) + 1;
 	sign_count++;
-	last_signal(&current_node, &first_node, &sign_count, ucontext, info);
+	last_signal(&current_node, &first_node, &sign_count, info);
+	(void)ucontext;
 }
 
 int	main(void)
 {
-	struct sigaction sa;
-	
+	struct sigaction	sa;
+
 	ft_bzero(&sa, sizeof(sa));
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = handler;
-	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa, NULL) == -1)
+	if (sigaction(SIGUSR1, &sa, NULL) == -1
+		|| sigaction(SIGUSR2, &sa, NULL) == -1)
 	{
 		ft_putendl_fd("Failed to set up signal handlers", 2);
 		return (-1);
 	}
 	ft_printf("Server PID: %d\n", getpid());
-	while(1)
+	while (1)
 		pause();
 	return (0);
 }
