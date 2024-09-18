@@ -6,7 +6,7 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 13:38:29 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/14 12:23:38 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/18 13:54:42 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,22 @@ typedef struct	s_target
 	char			*s;
 	unsigned int	s_len;
 }				t_target;
+
+////////////////////////////////////////UTILS///////////////////////////////////
+void	free_list(t_chars **first_node);
+void	add_last(t_chars **first_node, t_chars *current_node);
+
+////////////////////////////////////////SERVER//////////////////////////////////
+void	end_of_transmission(t_chars **first_node, t_chars **current_node,
+								size_t *sign_count);
+t_chars	*init_node(void);
+void	last_signal(t_chars **current_node, t_chars **first_node,
+						size_t *sign_count, siginfo_t *info);
+void	handler(int sign_id, siginfo_t *info, void *ucontext);
+
+////////////////////////////////////////CLIENT//////////////////////////////////
+t_target	*get_msg(t_target *new_msg);
+void		free_exit(t_target *target, const char *msg);
+void		send_message(int signum);
 
 #endif /** MINITALK_H */

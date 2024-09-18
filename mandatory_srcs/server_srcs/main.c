@@ -6,23 +6,11 @@
 /*   By: thbasse <thbasse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 18:38:40 by thbasse           #+#    #+#             */
-/*   Updated: 2024/09/18 13:26:07 by thbasse          ###   ########.fr       */
+/*   Updated: 2024/09/18 13:53:58 by thbasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minitalk.h"
-
-void	free_list(t_chars **first_node)
-{
-	t_chars	*tmp;
-
-	while (*first_node != NULL)
-	{
-		tmp = *first_node;
-		*first_node = (*first_node)->next;
-		free(tmp);
-	}
-}
 
 void	end_of_transmission(t_chars **first_node, t_chars **current_node,
 								size_t *sign_count)
@@ -40,23 +28,6 @@ void	end_of_transmission(t_chars **first_node, t_chars **current_node,
 		(*first_node) = tmp;
 	}
 	ft_printf("\n");
-}
-
-void	add_last(t_chars **first_node, t_chars *current_node)
-{
-	t_chars	*last;
-
-	if (*first_node == NULL)
-	{
-		*first_node = current_node;
-		return ;
-	}
-	last = (*first_node);
-	while (last->next != NULL)
-	{
-		last = last->next;
-	}
-	last->next = current_node;
 }
 
 t_chars	*init_node(void)
